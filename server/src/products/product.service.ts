@@ -12,7 +12,10 @@ export class ProductsService {
 	async createProducts(items: Product[]): Promise<any> {
 		try {
 			const result = await this.productModel.insertMany(items);
-			return result;
+			return {
+				success: true,
+				product: result
+			};
 		} catch (error) {
 			throw new Error(`Failed to insert products: ${error.message}`);
 		}

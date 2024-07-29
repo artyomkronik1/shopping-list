@@ -1,12 +1,10 @@
 import React, { useContext, useEffect } from 'react';
-import { Box, Container, Typography } from '@mui/material';
+import { Box, Button, Container, Typography } from '@mui/material';
 import { observer } from 'mobx-react-lite';
 import productStore from '../store/productsStore';
-import ProductComponent from './ProductComponent';
-import CompleteOrderButton from './CompleteOrederButton';
-import ItemList from './ProductsList';
+import AddProductForm from './AddProductForm';
+import ProductsList from './ProductsList';
 import { CartContext } from '../context/context';
-import CategoriesService from '../services/categories.service';
 
 const MainComponent: React.FC = observer(() => {
 	const cartStore = useContext(CartContext);
@@ -20,23 +18,41 @@ const MainComponent: React.FC = observer(() => {
 		};
 
 		fetchCategories();
-	}, []); //
+	}, []);
+
+	const handleCompleteOrder = async () => {
+		const res = await productStore.completeOrder();
+
+		if (res) {
+			alert('הזמנה בוצעה בהצלחה ונשלחה לשרת');
+		}
+		else {
+			alert('קרתה שגיעה וההזמנה לא נשלחה לשרת');
+
+		}
+	};
 	return (
 		<div dir='rtl'>
 			<Container>
-				<div style={{ display: 'flex', padding: '20px', background: '#cfcccc', justifyContent: 'center' }}>
-					<h4 style={{ fontSize: '26px' }}> רשימת קניות </h4>
+				{/* title */}
+				<div style={{ display: 'flex', padding: '20px', background: '#f0eded', justifyContent: 'center' }}>
+					<h4 style={{ fontSize: '26px', color: '#0a66c2' }}> רשימת קניות </h4>
 				</div>
-				<Box my={4}>
-					<Typography variant="h6" style={{ justifyContent: 'end', display: 'flex' }}>
+				<Box my={2}>
+					{/* total items */}
+					<Typography variant="h6" style={{ color: '#0a66c2', justifyContent: 'end', display: 'flex' }}>
 						סה"כ : {productStore.totalItems}
 					</Typography>
-
-					<ProductComponent />
-					<div style={{ border: '1px solid black', width: '100%', marginTop: '50px', marginBottom: '50px' }}></div>
-					<ItemList />
+					{/* form for add prodyct */}
+					<AddProductForm />
+					<div style={{ border: '1px solid #dcdcdc', width: '100%', marginTop: '50px', marginBottom: '50px' }}></div>
+					{/* ProductsList */}
+					<ProductsList />
+					{/* complete order */}
 					{productStore.items.length > 0 && (
-						<CompleteOrderButton />
+						<Button style={{ borderRadius: '25px' }} variant="contained" color="success" onClick={handleCompleteOrder}>
+							סיים הזמנה
+						</Button>
 					)}
 
 				</Box>

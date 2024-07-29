@@ -7,14 +7,11 @@ import { Category } from '../interfaces/category';
 import { observer } from 'mobx-react-lite';
 
 
-const ItemForm: React.FC = observer(() => {
+const AddProductForm: React.FC = observer(() => {
 	const [name, setName] = useState('');
-	console.log(productStore.categories);
-
 	const [category, setCategory] = useState<Category>({ id: '', name: '' });
-
 	const handleAddItem = () => {
-		if (name.trim()) {
+		if (name.trim() && category.name.trim()) {
 			const product: Product = { name: name, category: category.name, quantity: 1 }
 			productStore.addItem(product);
 			setName('');
@@ -32,8 +29,8 @@ const ItemForm: React.FC = observer(() => {
 			/>
 
 
-			<FormControl size="medium" variant='filled' margin="normal" style={{ width: '250px' }}>
-				<InputLabel>קטגוריה</InputLabel>
+			<FormControl size="medium" variant='filled' margin="normal" style={{ width: '230px' }}>
+				<InputLabel variant='outlined'>קטגוריה</InputLabel>
 				<Select
 					key={category.id}
 					value={category.name}
@@ -41,7 +38,7 @@ const ItemForm: React.FC = observer(() => {
 					label="קטגוריה"
 				>
 					{productStore.categories.map(cat => (
-						<MenuItem key={cat.id} value={cat.name}>{cat.name}</MenuItem>
+						<MenuItem key={cat.name} value={cat.name}>{cat.name}</MenuItem>
 					))}
 				</Select>
 			</FormControl>
@@ -54,4 +51,4 @@ const ItemForm: React.FC = observer(() => {
 	);
 });
 
-export default ItemForm;
+export default AddProductForm;
