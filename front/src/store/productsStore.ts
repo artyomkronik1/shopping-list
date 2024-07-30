@@ -41,9 +41,12 @@ class ProductStore {
 	}
 
 	async completeOrder() {
-		// Simulate a server call
-		return await CompleteOrderService.completeOrder(this.items)
-		// Here, you can make an actual HTTP request to save the cart data
+		const res = await CompleteOrderService.completeOrder(this.items)
+		if (res) {
+			// reset the items
+			this.items = []
+		}
+		return res;
 	}
 	async getCategoriesFromServer() {
 		const res = await CategoriesService.getCategories();
